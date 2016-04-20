@@ -20,12 +20,13 @@ type Monitor struct {
 func New() *Monitor {
 	monitor := &Monitor{}
 	monitor.Id = time.Now().Unix()
-	monitor.ticker = *time.NewTicker(time.Second * 5)
+	monitor.ticker = *time.NewTicker(time.Minute)
 	log.Printf("Initializing new gomon monitor. Monitor id: %d", monitor.Id)
 
 	return monitor
 }
 
+// Start monitoring the application
 func (m Monitor) Start() {
 	log.Println("Starting gomon")
 	go func() {
@@ -35,6 +36,7 @@ func (m Monitor) Start() {
 	}()
 }
 
+// CaptureGoRoutineStats enables logging information about go rountine count
 func (m *Monitor) CaptureGoRoutineStats() *Monitor {
 	m.watchingGR = true
 	return m
@@ -42,6 +44,6 @@ func (m *Monitor) CaptureGoRoutineStats() *Monitor {
 
 func (m *Monitor) logGR() {
 	if m.watchingGR == true {
-		log.Printf("%s Num go routines running: %d", LOG_PREFIX, runtime.NumGoroutine())
+		log.Printf("%s #GO_ROUTINES: %d", LOG_PREFIX, runtime.NumGoroutine())
 	}
 }
